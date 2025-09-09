@@ -48,6 +48,11 @@
     padding: 10px;
   }
   
+  #button-2w {
+    grid-column: 1 / span 2;
+    border-radius: 10px;
+  }
+
   .button {
     background-color: #d1d7e0;
     border: none;

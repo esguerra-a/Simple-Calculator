@@ -12,12 +12,18 @@ function updateDisplay() {
 }
 function resetDisplay(){
   currentOperandText.textContent = currentOperand || "0";
+  previousOperandText.textContent = previousOperand || "";
 }
 function clearAll() {
   currentOperand = "";
   previousOperand = "";
   operator = "";
   resetDisplay();
+}
+
+function deleteLastDigit() {
+  currentOperand = currentOperand.substring(0, currentOperand.length - 1);
+  updateDisplay();
 }
 
 function appendNumber(number) {
@@ -58,9 +64,6 @@ function calculate() {
           currentOperand = (prev / curr).toString();
       }
       break;
-    case "%":
-      currentOperand = (prev % curr).toString();
-      break;
     default:
       return;
   }
@@ -81,6 +84,8 @@ document.querySelector(".button-container").addEventListener("click", (event) =>
     appendNumber(target.dataset.number);
   } else if (target.matches("[data-action='clear']")) {
     clearAll();
+  } else if (target.matches("[data-action='del']")) {
+    deleteLastDigit();
   } else if (target.matches("[data-action='toggle-sign']")) {
     toggleSign();
   } else if (target.matches("[data-action='equals']")) {
