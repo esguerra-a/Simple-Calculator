@@ -5,13 +5,35 @@
   
   body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
     background-color: rgba(0, 0, 0, 0.8)
   }
+
+  header {
+    display: flex;
+    flex-direction: inherit;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  h2, h3 {
+    color: #d1d7e0;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
   
+  .title {
+    color:cadetblue;
+  }
+
+  .me {
+    color:#ffdbac;
+  }
+
   .calculator {
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -21,7 +43,7 @@
   
   .text-area {
     background-color: #2d283e;
-    color: #fdd1f1;
+    color: #aedddf;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -44,7 +66,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-    background-color: #977f9e;
+    background-color: cadetblue;
     padding: 10px;
   }
   
@@ -60,22 +82,24 @@
     font-size: 1.5em;
     padding: 20px;
     cursor: pointer;
+    transition-duration: 0.25s;
   }
   
   .button:hover {
-    background-color: #351c44;
+    background-color: #2d283e;
     color: #d1d7e0;
     transform: scale(0.9);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.4);
   }
   
   .button.operator {
-    background-color: #443e66;
+    background-color:rgb(0, 117, 117);
     color: white;
   }
   
   .button.operator:hover {
     transform: scale(0.9);
-    background-color: #7E60BF;
+    background-color:lightseagreen;
   }
 
   .equal {
@@ -84,7 +108,7 @@
   }
 
   .equal:hover {
-    background-color: #7E60BF;
+    background-color:#d1d7e0;
     color: #2d283e;
     transform: scale(0.91);
   }
