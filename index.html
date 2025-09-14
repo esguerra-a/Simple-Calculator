@@ -7,8 +7,124 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <title>Calculator</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    *{
+      font-family: "Montserrat Alternates", sans-serif;
+      font-weight: 600;
+    }
+    
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: rgba(0, 0, 0, 0.8)
+    }
+
+    header {
+      display: flex;
+      flex-direction: inherit;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    h2, h3 {
+      color: #d1d7e0;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+    
+    .title {
+      color:cadetblue;
+    }
+
+    .me {
+      color:#ffdbac;
+    }
+
+    .calculator {
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      max-width: 350px;
+    }
+    
+    .text-area {
+      background-color: #2d283e;
+      color: #aedddf;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: right;
+      padding: 20px;
+      height: 100px;
+    }
+    
+    .previous-operand {
+      font-size: 1.2em;
+      opacity: 0.6;
+    }
+    
+    .current-operand {
+      font-size: 2.5em;
+      word-wrap: break-word;
+    }
+    
+    .button-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      background-color: cadetblue;
+      padding: 10px;
+    }
+    
+    #button-2w {
+      grid-column: 1 / span 2;
+      border-radius: 10px;
+    }
+
+    .button {
+      background-color: #d1d7e0;
+      border: none;
+      border-radius: 15%;
+      font-size: 1.5em;
+      padding: 20px;
+      cursor: pointer;
+      transition-duration: 0.25s;
+    }
+    
+    .button:hover {
+      background-color: #2d283e;
+      color: #d1d7e0;
+      transform: scale(0.9);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+    
+    .button.operator {
+      background-color:rgb(0, 117, 117);
+      color: white;
+    }
+    
+    .button.operator:hover {
+      transform: scale(0.9);
+      background-color:lightseagreen;
+    }
+
+    .equal {
+      background-color: #2d283e;
+      color: #d1d7e0;
+    }
+
+    .equal:hover {
+      background-color:#d1d7e0;
+      color: #2d283e;
+      transform: scale(0.91);
+    }
+  </style>
 </head>
+
 <body>
   <header>
     <h2 class="title">Simple Calculator</h2>
@@ -46,6 +162,110 @@
       <button class="button equal" data-action="equals">=</button>
     </div>
   </div>
-  <script src="script.js"></script>
+  <script>
+    const previousOperandText = document.getElementById("previous-operand");
+    const currentOperandText = document.getElementById("current-operand");
+    const errorSound = new Audio(src="sounds/ErrorSound.mp3");
+
+    let currentOperand = "";
+    let previousOperand = "";
+    let operator = "";
+
+    function updateDisplay() {
+      currentOperandText.textContent = currentOperand || "_";
+      previousOperandText.textContent = previousOperand;
+    }
+    function resetDisplay(){
+      currentOperandText.textContent = currentOperand || "0";
+      previousOperandText.textContent = previousOperand || "";
+    }
+    function clearAll() {
+      currentOperand = "";
+      previousOperand = "";
+      operator = "";
+      resetDisplay();
+    }
+
+    function deleteLastDigit() {
+      currentOperand = currentOperand.substring(0, currentOperand.length - 1);
+      updateDisplay();
+    }
+
+    function appendNumber(number) {
+      if (number === "." && currentOperand.includes(".")) return;
+      currentOperand += number;
+      updateDisplay();
+    }
+
+    function chooseOperation(selectedOperator) {
+      if (currentOperand === "") return;
+      if (previousOperand !== "") calculate();
+      operator = selectedOperator;
+      previousOperand = currentOperand + ` ${operator}`;
+      currentOperand = "";
+      updateDisplay();
+    }
+
+    function calculate() {
+      const prev = parseFloat(previousOperand);
+      const curr = parseFloat(currentOperand);
+      if (isNaN(prev) || isNaN(curr)) return;
+
+      switch (operator) {
+        case "+":
+          currentOperand = (prev + curr).toString();
+          break;
+        case "-":
+          currentOperand = (prev - curr).toString();
+          break;
+        case "x":
+          currentOperand = (prev * curr).toString();
+          break;
+        case "÷":
+          if (curr === 0) { 
+            currentOperand = "Math error";
+            try {
+              errorSound.play();
+            } catch{
+
+            };
+          } else {
+              currentOperand = (prev / curr).toString();
+          }
+          break;
+        default:
+          return;
+      }
+      operator = "";
+      previousOperand = "";
+      updateDisplay();
+    }
+
+    function toggleSign() {
+      if (currentOperand === "") return;
+      currentOperand = (parseFloat(currentOperand) * -1).toString();
+      updateDisplay();
+    }
+
+    document.querySelector(".button-container").addEventListener("click", (event) => {
+      const target = event.target;
+      if (target.matches("[data-number]")) {
+        appendNumber(target.dataset.number);
+      } else if (target.matches("[data-action='clear']")) {
+        clearAll();
+      } else if (target.matches("[data-action='del']")) {
+        deleteLastDigit();
+      } else if (target.matches("[data-action='toggle-sign']")) {
+        toggleSign();
+      } else if (target.matches("[data-action='equals']")) {
+        calculate();
+      } else if (target.matches(".operator")) {
+        chooseOperation(target.textContent.trim());
+      }
+    });
+
+    updateDisplay();
+
+  </script>
 </body>
 </html>
