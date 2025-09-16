@@ -165,7 +165,6 @@
   <script>
     const previousOperandText = document.getElementById("previous-operand");
     const currentOperandText = document.getElementById("current-operand");
-    const errorSound = new Audio(src="sounds/ErrorSound.mp3");
 
     let currentOperand = "";
     let previousOperand = "";
@@ -224,11 +223,6 @@
         case "÷":
           if (curr === 0) { 
             currentOperand = "Math error";
-            try {
-              errorSound.play();
-            } catch{
-
-            };
           } else {
               currentOperand = (prev / curr).toString();
           }
